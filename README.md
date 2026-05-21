@@ -1,1 +1,0 @@
-This repository provides a Jupyter notebook for reproducing the experiments reported in our paper, 'Feature Complexity and Architecture Performance in Deep Learning Financial Forecasting: An Empirical Systematic Literature Review.'
