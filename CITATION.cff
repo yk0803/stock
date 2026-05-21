@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite the associated paper."
+title: "Stock Index Forecasting with Deep Learning"
+authors:
+  - family-names: "Author"
+    given-names: "First"
+year: 2026
+license: MIT

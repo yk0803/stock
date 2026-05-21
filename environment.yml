@@ -1,0 +1,18 @@
+name: stock-index-forecasting
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - python=3.11
+  - numpy
+  - pandas
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - notebook
+  - pip
+  - pip:
+      - torch
+      - optuna
+      - yfinance
+      - ta

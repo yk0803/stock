@@ -1,0 +1,578 @@
+{
+  "LSTM_SP500_A": {
+    "arch": "LSTM",
+    "index": "SP500",
+    "scenario": "A",
+    "best_val_mae": 36.400245666503906,
+    "best_params": {
+      "lookback": 3,
+      "lr": 0.000816845589476017,
+      "dropout": 0.0,
+      "batch_size": 64,
+      "h1": 128,
+      "h2": 32
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 19
+  },
+  "LSTM_SP500_B": {
+    "arch": "LSTM",
+    "index": "SP500",
+    "scenario": "B",
+    "best_val_mae": 37.01179885864258,
+    "best_params": {
+      "lookback": 2,
+      "lr": 0.0008374737674708763,
+      "dropout": 0.0,
+      "batch_size": 32,
+      "h1": 96,
+      "h2": 96
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 15
+  },
+  "LSTM_SP500_C": {
+    "arch": "LSTM",
+    "index": "SP500",
+    "scenario": "C",
+    "best_val_mae": 37.85335922241211,
+    "best_params": {
+      "lookback": 2,
+      "lr": 0.0006346444167499811,
+      "dropout": 0.3,
+      "batch_size": 32,
+      "h1": 96,
+      "h2": 64
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 16
+  },
+  "LSTM_EUROSTOXX50_A": {
+    "arch": "LSTM",
+    "index": "EUROSTOXX50",
+    "scenario": "A",
+    "best_val_mae": 35.32975769042969,
+    "best_params": {
+      "lookback": 2,
+      "lr": 0.002928186858102937,
+      "dropout": 0.2,
+      "batch_size": 128,
+      "h1": 96,
+      "h2": 96
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 14
+  },
+  "LSTM_EUROSTOXX50_B": {
+    "arch": "LSTM",
+    "index": "EUROSTOXX50",
+    "scenario": "B",
+    "best_val_mae": 40.46445846557617,
+    "best_params": {
+      "lookback": 20,
+      "lr": 0.0026242398514506496,
+      "dropout": 0.3,
+      "batch_size": 128,
+      "h1": 64,
+      "h2": 96
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 14
+  },
+  "LSTM_EUROSTOXX50_C": {
+    "arch": "LSTM",
+    "index": "EUROSTOXX50",
+    "scenario": "C",
+    "best_val_mae": 41.525970458984375,
+    "best_params": {
+      "lookback": 20,
+      "lr": 0.0014299779613089949,
+      "dropout": 0.0,
+      "batch_size": 128,
+      "h1": 96,
+      "h2": 96
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 13
+  },
+  "LSTM_NIKKEI225_A": {
+    "arch": "LSTM",
+    "index": "NIKKEI225",
+    "scenario": "A",
+    "best_val_mae": 270.98236083984375,
+    "best_params": {
+      "lookback": 20,
+      "lr": 0.0017643967683381545,
+      "dropout": 0.0,
+      "batch_size": 128,
+      "h1": 128,
+      "h2": 96
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 16
+  },
+  "LSTM_NIKKEI225_B": {
+    "arch": "LSTM",
+    "index": "NIKKEI225",
+    "scenario": "B",
+    "best_val_mae": 274.0672607421875,
+    "best_params": {
+      "lookback": 10,
+      "lr": 0.0007890347196952535,
+      "dropout": 0.2,
+      "batch_size": 32,
+      "h1": 64,
+      "h2": 96
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 11
+  },
+  "LSTM_NIKKEI225_C": {
+    "arch": "LSTM",
+    "index": "NIKKEI225",
+    "scenario": "C",
+    "best_val_mae": 277.5221862792969,
+    "best_params": {
+      "lookback": 10,
+      "lr": 0.002409214543666477,
+      "dropout": 0.1,
+      "batch_size": 64,
+      "h1": 128,
+      "h2": 32
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 20
+  },
+  "BiLSTM_SP500_A": {
+    "arch": "BiLSTM",
+    "index": "SP500",
+    "scenario": "A",
+    "best_val_mae": 36.22066116333008,
+    "best_params": {
+      "lookback": 10,
+      "lr": 0.004544383960336014,
+      "dropout": 0.2,
+      "batch_size": 128,
+      "h1": 64,
+      "h2": 32
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 15
+  },
+  "BiLSTM_SP500_B": {
+    "arch": "BiLSTM",
+    "index": "SP500",
+    "scenario": "B",
+    "best_val_mae": 36.88930892944336,
+    "best_params": {
+      "lookback": 2,
+      "lr": 0.0027427649647949804,
+      "dropout": 0.0,
+      "batch_size": 32,
+      "h1": 96,
+      "h2": 96
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 11
+  },
+  "BiLSTM_SP500_C": {
+    "arch": "BiLSTM",
+    "index": "SP500",
+    "scenario": "C",
+    "best_val_mae": 38.11695861816406,
+    "best_params": {
+      "lookback": 3,
+      "lr": 0.0004301599691541943,
+      "dropout": 0.2,
+      "batch_size": 32,
+      "h1": 64,
+      "h2": 64
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 17
+  },
+  "BiLSTM_EUROSTOXX50_A": {
+    "arch": "BiLSTM",
+    "index": "EUROSTOXX50",
+    "scenario": "A",
+    "best_val_mae": 35.494468688964844,
+    "best_params": {
+      "lookback": 3,
+      "lr": 0.0008474900251773069,
+      "dropout": 0.0,
+      "batch_size": 64,
+      "h1": 64,
+      "h2": 64
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 19
+  },
+  "BiLSTM_EUROSTOXX50_B": {
+    "arch": "BiLSTM",
+    "index": "EUROSTOXX50",
+    "scenario": "B",
+    "best_val_mae": 39.96467208862305,
+    "best_params": {
+      "lookback": 20,
+      "lr": 0.0017643967683381545,
+      "dropout": 0.0,
+      "batch_size": 128,
+      "h1": 128,
+      "h2": 96
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 11
+  },
+  "BiLSTM_EUROSTOXX50_C": {
+    "arch": "BiLSTM",
+    "index": "EUROSTOXX50",
+    "scenario": "C",
+    "best_val_mae": 41.83906555175781,
+    "best_params": {
+      "lookback": 20,
+      "lr": 0.0017643967683381545,
+      "dropout": 0.0,
+      "batch_size": 128,
+      "h1": 128,
+      "h2": 96
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 11
+  },
+  "BiLSTM_NIKKEI225_A": {
+    "arch": "BiLSTM",
+    "index": "NIKKEI225",
+    "scenario": "A",
+    "best_val_mae": 273.122802734375,
+    "best_params": {
+      "lookback": 10,
+      "lr": 0.007219277407213828,
+      "dropout": 0.2,
+      "batch_size": 128,
+      "h1": 96,
+      "h2": 32
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 16
+  },
+  "BiLSTM_NIKKEI225_B": {
+    "arch": "BiLSTM",
+    "index": "NIKKEI225",
+    "scenario": "B",
+    "best_val_mae": 271.16162109375,
+    "best_params": {
+      "lookback": 10,
+      "lr": 0.001311521992014618,
+      "dropout": 0.0,
+      "batch_size": 32,
+      "h1": 128,
+      "h2": 32
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 15
+  },
+  "BiLSTM_NIKKEI225_C": {
+    "arch": "BiLSTM",
+    "index": "NIKKEI225",
+    "scenario": "C",
+    "best_val_mae": 280.9060363769531,
+    "best_params": {
+      "lookback": 20,
+      "lr": 0.0017643967683381545,
+      "dropout": 0.0,
+      "batch_size": 128,
+      "h1": 128,
+      "h2": 96
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 16
+  },
+  "TCN_SP500_A": {
+    "arch": "TCN",
+    "index": "SP500",
+    "scenario": "A",
+    "best_val_mae": 36.29735565185547,
+    "best_params": {
+      "lookback": 3,
+      "lr": 0.00047340227734041945,
+      "dropout": 0.0,
+      "batch_size": 64,
+      "channels": 64
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 11
+  },
+  "TCN_SP500_B": {
+    "arch": "TCN",
+    "index": "SP500",
+    "scenario": "B",
+    "best_val_mae": 36.750633239746094,
+    "best_params": {
+      "lookback": 2,
+      "lr": 0.004870029598042151,
+      "dropout": 0.2,
+      "batch_size": 64,
+      "channels": 64
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 7
+  },
+  "TCN_SP500_C": {
+    "arch": "TCN",
+    "index": "SP500",
+    "scenario": "C",
+    "best_val_mae": 36.92495346069336,
+    "best_params": {
+      "lookback": 2,
+      "lr": 0.0020065771485986692,
+      "dropout": 0.1,
+      "batch_size": 64,
+      "channels": 32
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 9
+  },
+  "TCN_EUROSTOXX50_A": {
+    "arch": "TCN",
+    "index": "EUROSTOXX50",
+    "scenario": "A",
+    "best_val_mae": 35.23982620239258,
+    "best_params": {
+      "lookback": 2,
+      "lr": 0.0005270728297566439,
+      "dropout": 0.2,
+      "batch_size": 32,
+      "channels": 128
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 8
+  },
+  "TCN_EUROSTOXX50_B": {
+    "arch": "TCN",
+    "index": "EUROSTOXX50",
+    "scenario": "B",
+    "best_val_mae": 40.275814056396484,
+    "best_params": {
+      "lookback": 2,
+      "lr": 0.0022331973408977186,
+      "dropout": 0.2,
+      "batch_size": 64,
+      "channels": 64
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 13
+  },
+  "TCN_EUROSTOXX50_C": {
+    "arch": "TCN",
+    "index": "EUROSTOXX50",
+    "scenario": "C",
+    "best_val_mae": 41.39460754394531,
+    "best_params": {
+      "lookback": 2,
+      "lr": 0.0004431296737499888,
+      "dropout": 0.2,
+      "batch_size": 64,
+      "channels": 64
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 9
+  },
+  "TCN_NIKKEI225_A": {
+    "arch": "TCN",
+    "index": "NIKKEI225",
+    "scenario": "A",
+    "best_val_mae": 272.66009521484375,
+    "best_params": {
+      "lookback": 5,
+      "lr": 0.0007927572922564708,
+      "dropout": 0.0,
+      "batch_size": 32,
+      "channels": 32
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 13
+  },
+  "TCN_NIKKEI225_B": {
+    "arch": "TCN",
+    "index": "NIKKEI225",
+    "scenario": "B",
+    "best_val_mae": 270.9458312988281,
+    "best_params": {
+      "lookback": 5,
+      "lr": 0.0009400881340238075,
+      "dropout": 0.1,
+      "batch_size": 32,
+      "channels": 32
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 12
+  },
+  "TCN_NIKKEI225_C": {
+    "arch": "TCN",
+    "index": "NIKKEI225",
+    "scenario": "C",
+    "best_val_mae": 278.4756164550781,
+    "best_params": {
+      "lookback": 10,
+      "lr": 0.009413993046829943,
+      "dropout": 0.3,
+      "batch_size": 128,
+      "channels": 64
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 12
+  },
+  "Transformer_SP500_A": {
+    "arch": "Transformer",
+    "index": "SP500",
+    "scenario": "A",
+    "best_val_mae": 36.320621490478516,
+    "best_params": {
+      "lookback": 10,
+      "lr": 0.0005798275187093718,
+      "dropout": 0.1,
+      "batch_size": 64,
+      "d_model": 64,
+      "n_heads": 8,
+      "n_layers": 2
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 19
+  },
+  "Transformer_SP500_B": {
+    "arch": "Transformer",
+    "index": "SP500",
+    "scenario": "B",
+    "best_val_mae": 36.998573303222656,
+    "best_params": {
+      "lookback": 2,
+      "lr": 0.0004351584755001316,
+      "dropout": 0.0,
+      "batch_size": 32,
+      "d_model": 32,
+      "n_heads": 8,
+      "n_layers": 1
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 17
+  },
+  "Transformer_SP500_C": {
+    "arch": "Transformer",
+    "index": "SP500",
+    "scenario": "C",
+    "best_val_mae": 38.30805206298828,
+    "best_params": {
+      "lookback": 2,
+      "lr": 0.0013260331922696556,
+      "dropout": 0.0,
+      "batch_size": 64,
+      "d_model": 32,
+      "n_heads": 2,
+      "n_layers": 1
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 16
+  },
+  "Transformer_EUROSTOXX50_A": {
+    "arch": "Transformer",
+    "index": "EUROSTOXX50",
+    "scenario": "A",
+    "best_val_mae": 35.574886322021484,
+    "best_params": {
+      "lookback": 3,
+      "lr": 0.0005698468447841544,
+      "dropout": 0.1,
+      "batch_size": 128,
+      "d_model": 64,
+      "n_heads": 4,
+      "n_layers": 2
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 17
+  },
+  "Transformer_EUROSTOXX50_B": {
+    "arch": "Transformer",
+    "index": "EUROSTOXX50",
+    "scenario": "B",
+    "best_val_mae": 40.30087661743164,
+    "best_params": {
+      "lookback": 20,
+      "lr": 0.00027852448642854907,
+      "dropout": 0.1,
+      "batch_size": 32,
+      "d_model": 64,
+      "n_heads": 4,
+      "n_layers": 1
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 15
+  },
+  "Transformer_EUROSTOXX50_C": {
+    "arch": "Transformer",
+    "index": "EUROSTOXX50",
+    "scenario": "C",
+    "best_val_mae": 43.58742904663086,
+    "best_params": {
+      "lookback": 10,
+      "lr": 0.0039634864398424095,
+      "dropout": 0.2,
+      "batch_size": 128,
+      "d_model": 32,
+      "n_heads": 8,
+      "n_layers": 1
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 13
+  },
+  "Transformer_NIKKEI225_A": {
+    "arch": "Transformer",
+    "index": "NIKKEI225",
+    "scenario": "A",
+    "best_val_mae": 270.7568359375,
+    "best_params": {
+      "lookback": 10,
+      "lr": 0.00029579519243829214,
+      "dropout": 0.1,
+      "batch_size": 128,
+      "d_model": 64,
+      "n_heads": 2,
+      "n_layers": 2
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 19
+  },
+  "Transformer_NIKKEI225_B": {
+    "arch": "Transformer",
+    "index": "NIKKEI225",
+    "scenario": "B",
+    "best_val_mae": 269.8603515625,
+    "best_params": {
+      "lookback": 3,
+      "lr": 0.0008276154326220069,
+      "dropout": 0.0,
+      "batch_size": 32,
+      "d_model": 32,
+      "n_heads": 2,
+      "n_layers": 1
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 20
+  },
+  "Transformer_NIKKEI225_C": {
+    "arch": "Transformer",
+    "index": "NIKKEI225",
+    "scenario": "C",
+    "best_val_mae": 285.44378662109375,
+    "best_params": {
+      "lookback": 3,
+      "lr": 0.005988723514571189,
+      "dropout": 0.1,
+      "batch_size": 64,
+      "d_model": 32,
+      "n_heads": 4,
+      "n_layers": 1
+    },
+    "n_trials_completed": 30,
+    "n_trials_pruned": 16
+  }
+}
