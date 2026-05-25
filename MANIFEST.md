@@ -1,17 +1,16 @@
-# Repository manifest
+# Manifest
 
-- `.gitignore`
-- `CITATION.cff`
-- `LICENSE`
-- `README.md`
-- `data/README.md`
-- `docs/reproducibility_notes.md`
-- `environment.yml`
-- `notebooks/Close_paper_May21.ipynb`
-- `requirements.txt`
-- `results/hyperparameters/best_hyperparameters.json`
-- `results/tables/aggregated_summary.csv`
-- `results/tables/dm_tests_refreshed.csv`
-- `scripts/run_full_pipeline.py`
-- `src/__init__.py`
-- `src/reports.py`
+This repository contains the reproducibility files for the empirical forecasting analysis.
+
+## Included
+
+- `notebooks/Close_paper_May23.ipynb`: updated analysis notebook.
+- `scripts/run_full_pipeline.py`: plain-Python extraction of the notebook workflow.
+- `results/tables/aggregated_summary.csv`: aggregated ten-seed validation/test metrics with MedAE.
+- `results/tables/dm_tests_refreshed.csv`: refreshed Diebold-Mariano results for A-vs-B and A-vs-C only.
+- `results/hyperparameters/best_hyperparameters.json`: Optuna-selected hyperparameters.
+- `src/reports.py`: validation and export utilities.
+
+## Not included
+
+Raw data, intermediate generated datasets, prediction arrays, local caches, model checkpoints, and environment directories are excluded from version control.

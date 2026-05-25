@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environments
+.venv/
+venv/
+env/
+.conda/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
+
+# Large or regenerated empirical artifacts
+data/raw/*
+data/processed/*
+results/seeded_results/*
+results/dm_tests/*
+results/latex/*
+*.pt
+*.pth
+*.ckpt
+*.pkl
+*.parquet
+
+# Keep directory notes
+!data/README.md

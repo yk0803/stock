@@ -1,17 +1,22 @@
-"""Reproducibility script extracted from notebooks/Close_paper_May21.ipynb.
+"""Plain-Python extraction of notebooks/Close_paper_May23.ipynb.
 
-The original notebook was prepared in Google Colab. This script keeps the paper
-workflow in a plain Python form for version control. For full reproduction,
-place the required Yahoo Finance-derived processed files under data/processed/
-and run the relevant sections sequentially.
+The original notebook was written for Google Colab. Colab shell commands and Drive-mount commands are commented out below. Review repository-relative paths before using this script for a full local rerun.
 """
 
-# %% [notebook cell 1]
+# %% Cell 0
+# Colab-only: !pip -q install yfinance ta scikit-learn pandas numpy
+
+# %% Cell 1
+# Colab-only: from google.colab import drive
 import os
 
 
+# Colab-only: drive.mount('/content/drive', force_remount=True)
+data_dir = '/content/drive/MyDrive/Close_res/'
+folder_path=data_dir
+# Colab-only: os.chdir('/content/drive/MyDrive/Close_res/')
 
-# %% [notebook cell 2]
+# %% Cell 2
 # =========================
 # 1) Install dependencies
 # =========================
@@ -310,10 +315,11 @@ for name, candidates in INDEX_TICKERS.items():
     print(f"{name}: using ticker {ticker}, rows={len(df_raw):,}, date range {df_raw.index.min().date()} → {df_raw.index.max().date()}")
     build_and_save_scenarios(name, df_raw)
 
-# %% [notebook cell 3]
+# %% Cell 3
 # =========================================
 # Leakage-safe normalization + time splits
 # =========================================
+# Colab-only: !pip -q install pandas numpy scikit-learn
 
 import os, json, math
 import numpy as np
@@ -321,7 +327,7 @@ import pandas as pd
 
 # --------- Config ---------
 BASE_DIR = ""                    # where your scenario CSVs are
-OUT_DIR  = "data/processed"
+OUT_DIR  = "/content/drive/MyDrive/Close_res/prepared"
 INDEXES  = ["SP500", "EUROSTOXX50", "NIKKEI225"]
 SCENARIOS = ["A", "B", "C", "D"]
 
@@ -455,12 +461,13 @@ for idx in INDEXES:
         print(f"[{idx} - {sc}] rows after warm-up drop: {len(z_df):,}  | train={ntr:,} val={nv:,} test={nts:,}")
         print(f"  -> Saved to: {base_out}")
 
-# %% [notebook cell 4]
+# %% Cell 4
 # ================================================================
 # PHASE 1: Hyperparameter tuning with Optuna (seed=42 only)
 # Tunes 4 architectures × 3 scenarios × 3 indices = 36 configs
 # Saves best hyperparameters as JSON
 # ================================================================
+# Colab-only: !pip -q install torch torchvision torchaudio numpy pandas scipy optuna
 
 import os, json, gc, random
 import numpy as np
@@ -479,8 +486,8 @@ from optuna.pruners import MedianPruner
 # -----------------------------
 # Config
 # -----------------------------
-PREP_DIR   = "data/processed"
-OUT_DIR    = "results/hyperparameters"
+PREP_DIR   = "/content/drive/MyDrive/Close_res/prepared"
+OUT_DIR    = "/content/drive/MyDrive/Close_res/optuna_results"
 INDEXES    = ["SP500", "EUROSTOXX50", "NIKKEI225"]
 SCENARIOS  = ["A", "B", "C"]
 ARCHS      = ["LSTM", "BiLSTM", "TCN", "Transformer"]
@@ -844,12 +851,13 @@ log_file.close()
 print(f"\nBest hyperparameters saved to: {OUT_DIR}/best_hyperparameters.json")
 print(f"Tuning log: {OUT_DIR}/tuning_log.txt")
 
-# %% [notebook cell 5]
+# %% Cell 5
 # ================================================================
 # PHASE 2: Multi-seed evaluation using best hyperparameters from Phase 1
 # Runs 10 seeds (none = 42) for each of 36 configs
 # Saves per-seed predictions and aggregated mean/std summary
 # ================================================================
+# Colab-only: !pip -q install torch torchvision torchaudio numpy pandas scipy
 
 import os, json, gc, random
 import numpy as np
@@ -864,9 +872,9 @@ from torch.utils.data import Dataset, DataLoader
 # -----------------------------
 # Config
 # -----------------------------
-PREP_DIR     = "data/processed"
-OPTUNA_DIR   = "results/hyperparameters"
-OUT_DIR      = "results/seeded_results"
+PREP_DIR     = "/content/drive/MyDrive/Close_res/prepared"
+OPTUNA_DIR   = "/content/drive/MyDrive/Close_res/optuna_results"
+OUT_DIR      = "/content/drive/MyDrive/Close_res/seeded_results"
 INDEXES      = ["SP500", "EUROSTOXX50", "NIKKEI225"]
 SCENARIOS    = ["A", "B", "C"]
 ARCHS        = ["LSTM", "BiLSTM", "TCN", "Transformer"]
@@ -921,11 +929,9 @@ def metrics(y_true, y_pred):
     r2 = 1.0 - ss_res / ss_tot if ss_tot > 0 else np.nan
     return {"MAE": mae, "RMSE": rmse, "MAPE": mape, "R2": r2}
 
-def mase_metric(y_true, y_pred, train_y, train_last):
-    """MASE: ratio of model MAE to in-sample naïve MAE."""
-    naive_mae = float(np.mean(np.abs(train_y - train_last)))
-    if naive_mae <= 0: return np.nan
-    return float(np.mean(np.abs(y_true - y_pred)) / naive_mae)
+def medae_metric(y_true, y_pred):
+    """MedAE: median absolute error (robust to outliers)."""
+    return float(np.median(np.abs(np.asarray(y_true) - np.asarray(y_pred))))
 
 # -----------------------------
 # Dataset, Models, Training (paste from Notebook 1)
@@ -1136,9 +1142,7 @@ for arch in ARCHS:
             roll  = load_roll(idx, sc)
             n_feats = len(feature_columns(df_tr))
 
-            # Train series for MASE denominator
-            train_last_raw = reconstruct_raw_close(df_tr, roll).values
-            train_y = df_tr[TARGET_COL].values
+
 
             for seed in EVAL_SEEDS:
                 set_all_seeds(seed)
@@ -1157,8 +1161,8 @@ for arch in ARCHS:
                 yt, pt, lt = predict_raw(model, loaders["test"])
 
                 mv = metrics(yv, pv); mt = metrics(yt, pt)
-                mv["MASE"] = mase_metric(yv, pv, train_y, train_last_raw)
-                mt["MASE"] = mase_metric(yt, pt, train_y, train_last_raw)
+                mv["MedAE"] = medae_metric(yv, pv)
+                mt["MedAE"] = medae_metric(yt, pt)
 
                 # Save predictions
                 save_dir = os.path.join(OUT_DIR, arch, idx, sc, f"seed_{seed}")
@@ -1178,7 +1182,7 @@ for arch in ARCHS:
                     "Lookback": L, "Split": "test", **mt
                 })
 
-                print(f"  seed={seed} | val MAE={mv['MAE']:.2f} | test MAE={mt['MAE']:.2f} | test MASE={mt['MASE']:.3f}")
+                print(f"  seed={seed} | val MAE={mv['MAE']:.2f} | test MAE={mt['MAE']:.2f} | test MedAE={mt['MedAE']:.3f}")
 
                 del model
                 if DEVICE == "cuda": torch.cuda.empty_cache()
@@ -1197,11 +1201,11 @@ def aggregate(df):
         RMSE_mean=("RMSE", "mean"), RMSE_std=("RMSE", "std"),
         MAPE_mean=("MAPE", "mean"), MAPE_std=("MAPE", "std"),
         R2_mean=("R2", "mean"),     R2_std=("R2", "std"),
-        MASE_mean=("MASE", "mean"), MASE_std=("MASE", "std"),
+        MedAE_mean=("MedAE", "mean"), MedAE_std=("MedAE", "std"),
         n_seeds=("MAE", "count")
     ).reset_index()
     t_crit = stats.t.ppf(0.975, df=agg["n_seeds"] - 1)
-    for m in ["MAE", "RMSE", "MAPE", "R2", "MASE"]:
+    for m in ["MAE", "RMSE", "MAPE", "R2", "MedAE"]:
         agg[f"{m}_ci95"] = t_crit * agg[f"{m}_std"] / np.sqrt(agg["n_seeds"])
     return agg
 
@@ -1211,12 +1215,15 @@ print(f"Saved aggregated: {OUT_DIR}/aggregated_summary.csv")
 
 print(f"\nTotal time: {datetime.now() - start_time}")
 
-# %% [notebook cell 6]
+# %% Cell 6
 # ================================================================
 # Diebold-Mariano refresh: 4 architectures × 3 indices × 2 pair-comparisons
 # Uses median predictions across 10 seeds for robustness
-# Includes HAC variance, Holm correction for multiple comparisons
+# Date-aligns scenarios by intersection of sample dates (handles
+# different lookbacks producing different test-period start rows)
+# Includes HAC variance and Holm correction
 # ================================================================
+# Colab-only: !pip -q install numpy pandas scipy
 
 import os, json
 import numpy as np
@@ -1226,10 +1233,10 @@ from scipy.stats import norm
 # -----------------------------
 # Config
 # -----------------------------
-SEEDED_DIR  = "results/seeded_results"
-OPTUNA_DIR  = "results/hyperparameters"
-PREP_DIR    = "data/processed"
-OUT_DIR     = "results/dm_tests"
+SEEDED_DIR  = "/content/drive/MyDrive/Close_res/seeded_results"
+OPTUNA_DIR  = "/content/drive/MyDrive/Close_res/optuna_results"
+PREP_DIR    = "/content/drive/MyDrive/Close_res/prepared"
+OUT_DIR     = "/content/drive/MyDrive/Close_res/dm_results"
 INDEXES     = ["SP500", "EUROSTOXX50", "NIKKEI225"]
 SCENARIOS   = ["A", "B", "C"]
 ARCHS       = ["LSTM", "BiLSTM", "TCN", "Transformer"]
@@ -1287,16 +1294,42 @@ def dm_test(y, yhat1, yhat2, loss="ae", nw_lags="auto"):
     return float(stat), float(pval), int(T), float(dbar)
 
 # -----------------------------
-# Load and median-aggregate predictions across 10 seeds
+# Date reconstruction helpers
 # -----------------------------
-def load_median_preds(arch, idx, sc):
+def load_test_split(idx, sc):
+    return pd.read_csv(f"{PREP_DIR}/{idx}/scenario_{sc}/test.csv.gz",
+                       parse_dates=[0], index_col=0).sort_index()
+
+def load_rolling_stats(idx, sc):
+    return pd.read_csv(f"{PREP_DIR}/{idx}/scenario_{sc}/rolling_stats.csv.gz",
+                       parse_dates=[0], index_col=0).sort_index()
+
+def dataset_sample_dates(df_test, roll_test, L):
     """
-    Load test predictions across 10 seeds and return median per timestep.
-    This gives a more stable point forecast for DM testing than a single seed.
+    Reconstruct the dates at which a SeqDataset with lookback L emits predictions.
+    Mirrors SeqDataset._build: starts at row L-1, skips rows where sd is invalid.
     """
+    sd = roll_test.loc[df_test.index, "sd_Close"].values.astype(float)
+    valid = np.isfinite(sd) & (sd != 0)
+    return pd.Index([df_test.index[i] for i in range(L - 1, len(df_test)) if valid[i]])
+
+# -----------------------------
+# Load and median-aggregate predictions across 10 seeds, with dates
+# -----------------------------
+def load_median_preds_dated(arch, idx, sc):
+    """
+    Load test predictions across 10 seeds, median them, and attach the
+    correct date index (reconstructed from prepared test CSV + the
+    Optuna-selected lookback for this configuration).
+    Returns a DataFrame indexed by date with columns ['y', 'yhat'], or None.
+    """
+    config_id = f"{arch}_{idx}_{sc}"
+    if config_id not in best_hp:
+        return None
+    L = best_hp[config_id]["best_params"]["lookback"]
+
     preds_per_seed = []
     y_true = None
-    last_close = None
     for seed in SEEDS:
         path = f"{SEEDED_DIR}/{arch}/{idx}/{sc}/seed_{seed}"
         if not os.path.exists(f"{path}/yhat_test.npy"):
@@ -1305,38 +1338,55 @@ def load_median_preds(arch, idx, sc):
         preds_per_seed.append(yh)
         if y_true is None:
             y_true = np.load(f"{path}/y_test.npy")
-            last_close = np.load(f"{path}/last_close_test.npy")
     if not preds_per_seed:
         return None
+
     preds_stack = np.stack(preds_per_seed, axis=0)
     median_preds = np.median(preds_stack, axis=0)
-    return {"y": y_true, "yhat": median_preds, "last": last_close, "n_seeds": len(preds_per_seed)}
+
+    # Reconstruct dates for this (arch, idx, sc, L) configuration
+    df_test = load_test_split(idx, sc)
+    roll_test = load_rolling_stats(idx, sc)
+    dates = dataset_sample_dates(df_test, roll_test, L)
+
+    # Align lengths defensively (in case of off-by-one in warm-up)
+    n = min(len(dates), len(y_true), len(median_preds))
+    return pd.DataFrame(
+        {"y": y_true[:n].reshape(-1), "yhat": median_preds[:n].reshape(-1)},
+        index=dates[:n]
+    )
 
 # -----------------------------
 # Run DM tests: A vs B and A vs C, for each architecture × index
 # -----------------------------
 rows = []
-pairs = [("A", "B"), ("A", "C"), ("B", "C")]
+pairs = [("A", "B"), ("A", "C")]
 
 for arch in ARCHS:
     for idx in INDEXES:
         for scA, scB in pairs:
-            preds_A = load_median_preds(arch, idx, scA)
-            preds_B = load_median_preds(arch, idx, scB)
-            if preds_A is None or preds_B is None:
+            A = load_median_preds_dated(arch, idx, scA)
+            B = load_median_preds_dated(arch, idx, scB)
+            if A is None or B is None:
+                print(f"⚠ Missing preds for {arch} {idx} {scA}/{scB} — skipping")
                 continue
 
-            # Align by minimum length (different scenarios may have different test set lengths
-            # if rolling normalization warm-up differs; usually identical, but be safe)
-            n = min(len(preds_A["y"]), len(preds_B["y"]))
-            yA = preds_A["y"][:n]
-            yhA = preds_A["yhat"][:n]
-            yhB = preds_B["yhat"][:n]
-            # Verify y_true matches (sanity check)
-            yB_check = preds_B["y"][:n]
-            if not np.allclose(yA, yB_check):
-                print(f"⚠ y_true mismatch for {arch} {idx} {scA}/{scB} — skipping")
+            # Date-based intersection (handles different lookbacks correctly)
+            common = A.index.intersection(B.index)
+            if len(common) < 20:
+                print(f"⚠ Too few aligned dates for {arch} {idx} {scA}/{scB} ({len(common)}) — skipping")
                 continue
+            A_aligned = A.loc[common]
+            B_aligned = B.loc[common]
+
+            # Sanity check: y_true should now match exactly across scenarios
+            if not np.allclose(A_aligned["y"].values, B_aligned["y"].values):
+                print(f"⚠ y_true mismatch for {arch} {idx} {scA}/{scB} after date alignment — skipping")
+                continue
+
+            yA  = A_aligned["y"].values
+            yhA = A_aligned["yhat"].values
+            yhB = B_aligned["yhat"].values
 
             stat_ae, p_ae, T, dbar_ae = dm_test(yA, yhA, yhB, loss="ae")
             stat_se, p_se, _,  dbar_se = dm_test(yA, yhA, yhB, loss="se")
@@ -1353,7 +1403,7 @@ for arch in ARCHS:
                 "DM_stat_AE": stat_ae, "p_AE_raw": p_ae, "dbar_AE": dbar_ae,
                 "DM_stat_SE": stat_se, "p_SE_raw": p_se, "dbar_SE": dbar_se,
                 "Winner_by_MAE": winner,
-                "n_seeds_used": preds_A["n_seeds"]
+                "n_seeds_used": len(SEEDS),
             })
 
 dm_df = pd.DataFrame(rows)
@@ -1377,8 +1427,8 @@ def holm_bonferroni(pvals):
     return adjusted
 
 if len(dm_df):
-    dm_df["p_AE_holm"] = holm_bonferroni(dm_df["p_AE_raw"].values)
-    dm_df["p_SE_holm"] = holm_bonferroni(dm_df["p_SE_raw"].values)
+    dm_df["p_AE_holm"]       = holm_bonferroni(dm_df["p_AE_raw"].values)
+    dm_df["p_SE_holm"]       = holm_bonferroni(dm_df["p_SE_raw"].values)
     dm_df["p_AE_bonferroni"] = np.minimum(dm_df["p_AE_raw"] * len(dm_df), 1.0)
 
 # -----------------------------
@@ -1386,27 +1436,25 @@ if len(dm_df):
 # -----------------------------
 dm_path = f"{OUT_DIR}/dm_tests_refreshed.csv"
 dm_df.to_csv(dm_path, index=False)
-print(f"Saved: {dm_path}\n")
+print(f"\nSaved: {dm_path}\n")
 
-# Summary statistics
-print("="*80)
+print("=" * 80)
 print("DM TEST SUMMARY")
-print("="*80)
-total = len(dm_df)
-sig_raw_05 = (dm_df["p_AE_raw"] < 0.05).sum()
+print("=" * 80)
+total       = len(dm_df)
+sig_raw_05  = (dm_df["p_AE_raw"]  < 0.05).sum()
 sig_holm_05 = (dm_df["p_AE_holm"] < 0.05).sum()
 print(f"Total comparisons: {total}")
 print(f"Significant at p<0.05 (raw):  {sig_raw_05} / {total}")
 print(f"Significant at p<0.05 (Holm): {sig_holm_05} / {total}")
 print()
 
-# Show all results sorted by raw p-value
-print("\nFull results table (sorted by raw p-value):")
+print("Full results table (sorted by raw p-value):")
 display_cols = ["Arch", "Index", "Pair", "MAE_A", "MAE_B", "Winner_by_MAE",
                 "DM_stat_AE", "p_AE_raw", "p_AE_holm"]
 print(dm_df.sort_values("p_AE_raw")[display_cols].to_string(index=False))
 
-# %% [notebook cell 7]
+# %% Cell 7
 import torch
 import json
 import torch
@@ -1414,7 +1462,7 @@ import torch.nn as nn
 import json
 import pandas as pd
 # Load best hyperparameters from Optuna
-with open("results/hyperparameters/best_hyperparameters.json") as f:
+with open("/content/drive/MyDrive/Close_res/optuna_results/best_hyperparameters.json") as f:
     best_hp = json.load(f)
 
 # -----------------------------
